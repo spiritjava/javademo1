@@ -4,28 +4,31 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 
 public class InsuranceDAO {
-	public String isUser(String uid,String pwd)
+	public UserBean isUser(String uid,String pwd)
 	{
+		UserBean details=new UserBean();
 		try
 		{
 			Class.forName("com.mysql.jdbc.Driver");
 			Connection con=DriverManager.getConnection("jdbc:mysql://localhost:3306/Insurance","root","root");
 			String role="";
 			Statement st=con.createStatement();
-			ResultSet rs=st.executeQuery("Select role from underWriter where uid='"+uid+"' and pwd='"+pwd+"'");
+			ResultSet rs=st.executeQuery("Select role,username from underWriter where uid='"+uid+"' and password='"+pwd+"'");
 			while(rs.next())
-				role=rs.getString(0);
+			{
+				details.setRole(rs.getString(1));
+				details.setUsername(rs.getString(2));
+			}
 			rs.close();
 			con.close();
-			return role;
-		}
-		catch(Exception e)
-		{			
-		System.out.println(e);
 			
 		}
-		return pwd;
-	}
-
-	
+		catch(Exception e)
+		{
+			System.out.println(e);
+		}
+		   return details;
+	            
+		
+	}	
 }

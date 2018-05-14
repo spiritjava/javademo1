@@ -9,6 +9,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 
 @WebServlet("/First")
@@ -25,19 +26,22 @@ public class FirstServlet extends HttpServlet {
 		PrintWriter out=response.getWriter();
 		String uid=request.getParameter("uid");
 		String pwd=request.getParameter("pwd");
-		String role=new InsuranceDAO().isUser(uid,pwd);
-		if(role=="")
+		UserBean details=new InsuranceDAO().isUser(uid,pwd);
+		out.print("pass");
+		if(details.getRole()=="")
 		{
 		 out.print("Sorry UserName or Password Error!")	;
 		 RequestDispatcher rd=request.getRequestDispatcher("Login.jsp");
 		}
 		else
 		{
-			if(role.equals("user"))
+			HttpSession session=request.getSession();
+			session.setAttribute("username", details.getUsername());
+			if(details.getRole().equals("home"))
 			{
 				response.sendRedirect("Mainmenu_user.jsp");
 			}
-			else if(role.equals("admin"))
+			else if(details.getRole().equals("admin"))
 			{
 				response.sendRedirect("Mainmenu_admin.jsp");
 			}
