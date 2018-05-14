@@ -20,7 +20,8 @@ public class InsuranceDAO {
 			return role;
 		}
 		catch(Exception e)
-		{
+		{			
+		System.out.println(e);
 			
 		}
 		return pwd;
